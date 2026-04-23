@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Retro Global Radio V2</title>
+    <title>Retro Global Radio V3</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -52,7 +52,6 @@
         }
         select:focus { border-color: #ffb000; }
 
-        /* 탐색 버튼 */
         .tune-btn {
             background: linear-gradient(to bottom, #555, #222);
             color: #fff; border: 1px solid #000; padding: 16px;
@@ -95,7 +94,7 @@
 <body>
 
 <div class="radio-device">
-    <div class="brand">Multi-Band Digital Receiver</div>
+    <div class="brand">World-Band Digital Receiver</div>
 
     <div class="display-panel">
         <div id="led-status" class="led-text">SYSTEM STANDBY</div>
@@ -107,21 +106,61 @@
             <div class="step-label">STEP 1: SELECT COUNTRY</div>
             <select id="country-select">
                 <option value="">국가를 선택하세요 (Select)</option>
-                <option value="South Korea">South Korea (대한민국)</option>
-                <option value="United States">United States (미국)</option>
-                <option value="United Kingdom">United Kingdom (영국)</option>
-                <option value="Japan">Japan (일본)</option>
-                <option value="France">France (프랑스)</option>
-                <option value="Germany">Germany (독일)</option>
-                <option value="Italy">Italy (이탈리아)</option>
-                <option value="Canada">Canada (캐나다)</option>
+                <optgroup label="Asia & Oceania">
+                    <option value="KR">Korea, South (대한민국)</option>
+                    <option value="JP">Japan (일본)</option>
+                    <option value="CN">China (중국)</option>
+                    <option value="TW">Taiwan (대만)</option>
+                    <option value="AU">Australia (호주)</option>
+                    <option value="NZ">New Zealand (뉴질랜드)</option>
+                    <option value="IN">India (인도)</option>
+                    <option value="ID">Indonesia (인도네시아)</option>
+                    <option value="TH">Thailand (태국)</option>
+                    <option value="VN">Vietnam (베트남)</option>
+                </optgroup>
+                <optgroup label="Americas">
+                    <option value="US">United States (미국)</option>
+                    <option value="CA">Canada (캐나다)</option>
+                    <option value="MX">Mexico (멕시코)</option>
+                    <option value="BR">Brazil (브라질)</option>
+                    <option value="AR">Argentina (아르헨티나)</option>
+                    <option value="CL">Chile (칠레)</option>
+                    <option value="CO">Colombia (콜롬비아)</option>
+                </optgroup>
+                <optgroup label="Europe">
+                    <option value="GB">United Kingdom (영국)</option>
+                    <option value="FR">France (프랑스)</option>
+                    <option value="DE">Germany (독일)</option>
+                    <option value="IT">Italy (이탈리아)</option>
+                    <option value="ES">Spain (스페인)</option>
+                    <option value="RU">Russia (러시아)</option>
+                    <option value="NL">Netherlands (네덜란드)</option>
+                    <option value="CH">Switzerland (스위스)</option>
+                    <option value="SE">Sweden (스웨덴)</option>
+                    <option value="NO">Norway (노르웨이)</option>
+                    <option value="FI">Finland (핀란드)</option>
+                    <option value="IE">Ireland (아일랜드)</option>
+                    <option value="PT">Portugal (포르투갈)</option>
+                    <option value="GR">Greece (그리스)</option>
+                    <option value="PL">Poland (폴란드)</option>
+                    <option value="UA">Ukraine (우크라이나)</option>
+                </optgroup>
+                <optgroup label="Middle East & Africa">
+                    <option value="AE">U.A.E (아랍에미리트)</option>
+                    <option value="SA">Saudi Arabia (사우디아라비아)</option>
+                    <option value="TR">Turkey (튀르키예)</option>
+                    <option value="IL">Israel (이스라엘)</option>
+                    <option value="ZA">South Africa (남아프리카 공화국)</option>
+                    <option value="EG">Egypt (이집트)</option>
+                    <option value="MA">Morocco (모로코)</option>
+                </optgroup>
             </select>
         </div>
 
         <div class="step-group">
-            <div class="step-label">STEP 2: SELECT GENRE</div>
+            <div class="step-label">STEP 2: SELECT GENRE (OPTIONAL)</div>
             <select id="genre-select">
-                <option value="">장르를 선택하세요 (Select)</option>
+                <option value="">전체 장르 (All Genres)</option>
                 <option value="news">News (뉴스/시사)</option>
                 <option value="talk">Talk (교양/토크)</option>
                 <option value="classical">Classical (클래식)</option>
@@ -129,6 +168,9 @@
                 <option value="pop">Pop (팝송)</option>
                 <option value="rock">Rock (락)</option>
                 <option value="kpop">K-Pop (케이팝)</option>
+                <option value="electronic">Electronic (일렉트로닉)</option>
+                <option value="ambient">Ambient (앰비언트)</option>
+                <option value="sports">Sports (스포츠)</option>
             </select>
         </div>
 
@@ -145,7 +187,7 @@
 
     <div class="list-window">
         <ul id="station-list">
-            <li class="no-data">국가와 장르를 선택한 후<br>SEARCH 버튼을 눌러주세요.</li>
+            <li class="no-data">국가를 선택한 후<br>SEARCH 버튼을 눌러주세요.</li>
         </ul>
     </div>
 </div>
@@ -163,12 +205,11 @@
     let isPlaying = false;
     let currentUrl = '';
 
-    // 검색 실행
     async function performSearch() {
-        const country = document.getElementById('country-select').value;
+        const countryCode = document.getElementById('country-select').value;
         const genre = document.getElementById('genre-select').value;
 
-        if(!country) {
+        if(!countryCode) {
             alert("먼저 국가를 선택해 주세요.");
             return;
         }
@@ -177,24 +218,22 @@
         ledStation.innerText = "SCANNING...";
         stationList.innerHTML = '<li class="no-data">주파수를 탐색 중입니다...</li>';
 
-        // 한국 검색 최적화 및 파라미터 구성
-        // countryExact 대신 country를 사용하여 검색 범위를 넓힘
-        let url = `https://de1.api.radio-browser.info/json/stations/search?limit=50&is_https=true&hidebroken=true&order=clickcount&reverse=true`;
-        url += `&country=${encodeURIComponent(country)}`;
+        // 핵심 변경: country 이름 대신 고유 countrycode(KR, US 등)를 사용하여 정확도 극대화
+        let url = `https://de1.api.radio-browser.info/json/stations/search?limit=100&is_https=true&hidebroken=true&order=clickcount&reverse=true`;
+        url += `&countrycode=${countryCode}`;
         if(genre) url += `&tag=${encodeURIComponent(genre)}`;
 
         try {
             const response = await fetch(url);
             const stations = await response.json();
 
-            // 결과가 없을 경우 메시지 처리
             if (stations.length === 0) {
                 ledStatus.innerText = "NO SIGNAL";
                 ledStation.innerText = "NOT FOUND";
                 stationList.innerHTML = `
                     <li class="no-data">
-                        "해당 카테고리에는 서비스가 없습니다."<br>
-                        <small style="color:#666">(HTTPS를 지원하지 않는 채널은 제외되었습니다)</small>
+                        "해당 조건의 라디오 채널이 없습니다."<br><br>
+                        <small style="color:#888;">* 보안(HTTPS)을 지원하지 않거나,<br>방송국에서 차단한 채널은 표시되지 않습니다.</small>
                     </li>`;
                 return;
             }
@@ -207,7 +246,7 @@
                 const li = document.createElement('li');
                 li.className = 'station-item';
                 li.innerHTML = `
-                    <div class="st-name">${station.name}</div>
+                    <div class="st-name">${station.name || 'Unknown Station'}</div>
                     <div class="st-tags">${station.tags ? station.tags.split(',').slice(0,3).join(', ') : 'No Tags'}</div>
                 `;
                 li.onclick = () => selectStation(station.url_resolved, station.name);
@@ -219,7 +258,6 @@
         }
     }
 
-    // 방송국 선택
     function selectStation(url, name) {
         currentUrl = url;
         ledStatus.innerText = "TUNED IN";
@@ -236,13 +274,14 @@
             playBtn.classList.add('playing');
         }).catch(e => {
             ledStatus.innerText = "LINK BROKEN";
+            ledStation.innerText = "CANNOT PLAY STREAM";
             isPlaying = false;
         });
     }
 
     function stopPlayback() {
         audioPlayer.pause();
-        audioPlayer.src = ""; // 스트림 완전 종료
+        audioPlayer.src = ""; 
         audioPlayer.src = currentUrl;
         isPlaying = false;
         btnIcon.innerText = "▶";
