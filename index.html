@@ -3,323 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Retro Global Radio</title>
+    <title>Retro Global Radio V2</title>
     <style>
-        /* 기본 리셋 및 폰트 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Helvetica Neue', Arial, sans-serif; 
-            background-color: #121212; /* 어두운 배경 */
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh;
-            color: #d1d1d1;
-            padding: 15px;
+            background-color: #1a1a1a; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; color: #d1d1d1; padding: 15px;
         }
 
-        /* 라디오 본체 (모던 빈티지 앰프 스타일) */
         .radio-device {
-            width: 100%;
-            max-width: 450px;
+            width: 100%; max-width: 450px;
             background: linear-gradient(145deg, #2b2b2b, #1f1f1f);
-            border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 
-                        inset 0 2px 2px rgba(255,255,255,0.1),
-                        inset 0 -2px 5px rgba(0,0,0,0.5);
-            padding: 25px 20px;
-            border: 1px solid #333;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 2px 2px rgba(255,255,255,0.1);
+            padding: 30px 20px; border: 1px solid #333;
         }
 
-        /* 브랜드/로고 영역 */
         .brand {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #777;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 1px 1px #000;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 4px;
+            color: #666; text-align: center; margin-bottom: 20px;
         }
 
-        /* 아날로그 LED 디스플레이 패널 */
+        /* LED 디스플레이 패널 */
         .display-panel {
-            background-color: #111;
-            border: 3px solid #0a0a0a;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 25px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.9);
-            position: relative;
-            overflow: hidden;
+            background-color: #0a0a0a; border: 4px solid #111; border-radius: 8px;
+            padding: 20px; margin-bottom: 25px; box-shadow: inset 0 2px 15px rgba(0,0,0,1);
         }
         
-        /* 앰버(호박색) 빛 발광 효과 */
         .led-text {
-            font-family: 'Courier New', Courier, monospace;
-            color: #ffb000; /* 빈티지 앰버 색상 */
-            text-shadow: 0 0 8px rgba(255, 176, 0, 0.6);
-            text-align: center;
+            font-family: 'Courier New', Courier, monospace; color: #ffb000;
+            text-shadow: 0 0 10px rgba(255, 176, 0, 0.7); text-align: center;
         }
-        #led-status { font-size: 0.8rem; margin-bottom: 5px; color: #cc8d00; }
-        #led-station { font-size: 1.1rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 1.3em;}
+        #led-status { font-size: 0.75rem; margin-bottom: 8px; opacity: 0.8; }
+        #led-station { font-size: 1.1rem; font-weight: bold; min-height: 1.4em; word-break: break-all; }
 
-        /* 다이얼 및 버튼 컨트롤 영역 */
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .control-group { display: flex; flex-direction: column; }
-        label { font-size: 0.65rem; color: #888; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; text-shadow: 0 1px 1px #000; }
+        /* 검색 스텝 영역 */
+        .search-steps { display: flex; flex-direction: column; gap: 20px; margin-bottom: 25px; }
+        .step-group { display: flex; flex-direction: column; gap: 8px; }
+        .step-label { font-size: 0.7rem; color: #ffb000; letter-spacing: 1px; font-weight: bold; }
         
         select {
-            appearance: none;
-            background: #222;
-            color: #ccc;
-            border: 1px solid #111;
-            padding: 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.1);
-            outline: none;
-            cursor: pointer;
+            appearance: none; background: #222; color: #eee;
+            border: 1px solid #444; padding: 12px; border-radius: 6px;
+            font-size: 0.95rem; cursor: pointer; outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
+        select:focus { border-color: #ffb000; }
 
-        /* 튜닝 버튼 (기계식 버튼 느낌) */
+        /* 탐색 버튼 */
         .tune-btn {
-            grid-column: 1 / -1;
-            background: linear-gradient(to bottom, #444, #222);
-            color: #eee;
-            border: 1px solid #111;
-            padding: 15px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: all 0.1s;
+            background: linear-gradient(to bottom, #555, #222);
+            color: #fff; border: 1px solid #000; padding: 16px;
+            border-radius: 8px; font-size: 1rem; font-weight: bold;
+            letter-spacing: 2px; cursor: pointer; transition: 0.1s;
+            box-shadow: 0 4px 0 #111;
         }
-        .tune-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.6), inset 0 2px 4px rgba(0,0,0,0.8);
-            background: #222;
-        }
+        .tune-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #111; }
 
-        /* 플레이어 컨트롤 (숨겨진 audio 태그를 제어) */
-        .player-controls {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #1a1a1a;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        /* 재생 영역 */
+        .player-bar {
+            margin-top: 10px; padding-top: 20px; border-top: 1px solid #333;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
         }
-        .play-stop-btn {
-            background: #111;
-            color: #ff3333;
-            border: 2px solid #000;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.1);
+        .play-btn {
+            background: #111; color: #ff4d4d; border: 2px solid #333;
+            width: 80px; height: 80px; border-radius: 50%; font-size: 0.8rem;
+            font-weight: bold; cursor: pointer; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .play-stop-btn.playing { color: #00ff00; text-shadow: 0 0 8px rgba(0,255,0,0.5); }
+        .play-btn.playing { color: #00ff00; border-color: #00ff00; text-shadow: 0 0 10px rgba(0,255,0,0.5); }
 
-        /* 주파수/방송국 리스트 */
-        .list-container {
-            background: #1a1a1a;
-            border: 1px solid #000;
-            border-radius: 4px;
-            height: 200px;
-            overflow-y: auto;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+        /* 리스트 영역 */
+        .list-window {
+            background: #111; border-radius: 8px; height: 180px;
+            overflow-y: auto; margin-top: 20px; border: 1px solid #000;
         }
-        
-        .station-list { list-style: none; }
         .station-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #222;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s;
+            padding: 15px; border-bottom: 1px solid #222; cursor: pointer;
+            display: flex; flex-direction: column; gap: 4px;
         }
-        .station-item:hover { background: #252525; }
-        .station-name { font-size: 0.9rem; color: #ddd; font-weight: 500; }
-        .station-meta { font-size: 0.7rem; color: #666; }
+        .station-item:hover { background: #1a1a1a; }
+        .st-name { color: #fff; font-size: 0.9rem; font-weight: bold; }
+        .st-tags { color: #666; font-size: 0.75rem; }
 
-        /* 스크롤바 커스텀 */
-        .list-container::-webkit-scrollbar { width: 8px; }
-        .list-container::-webkit-scrollbar-track { background: #111; }
-        .list-container::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-
-        .system-msg { padding: 20px; text-align: center; color: #888; font-size: 0.85rem; }
+        .no-data { padding: 40px 20px; text-align: center; color: #ffb000; font-size: 0.85rem; line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <div class="radio-device">
-        <div class="brand">GLOBAL RECEIVER MODEL-1</div>
+<div class="radio-device">
+    <div class="brand">Multi-Band Digital Receiver</div>
 
-        <div class="display-panel">
-            <div id="led-status" class="led-text">SYSTEM READY</div>
-            <div id="led-station" class="led-text">TUNE TO START</div>
-        </div>
-
-        <div class="controls">
-            <div class="control-group">
-                <label for="country">Country</label>
-                <select id="country">
-                    <option value="">ALL (전체 국가)</option>
-                    <option value="South Korea">South Korea (한국)</option>
-                    <option value="United States">United States (미국)</option>
-                    <option value="United Kingdom">United Kingdom (영국)</option>
-                    <option value="Japan">Japan (일본)</option>
-                    <option value="France">France (프랑스)</option>
-                    <option value="Germany">Germany (독일)</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="genre">Genre</label>
-                <select id="genre">
-                    <option value="">ALL (전체 장르)</option>
-                    <option value="news">News (뉴스/시사)</option>
-                    <option value="talk">Talk (교양/토크)</option>
-                    <option value="jazz">Jazz (재즈)</option>
-                    <option value="classical">Classical (클래식)</option>
-                    <option value="pop">Pop (팝송)</option>
-                    <option value="rock">Rock (락)</option>
-                </select>
-            </div>
-            <button id="tune-btn" class="tune-btn">TUNE SEARCH</button>
-        </div>
-
-        <div class="player-controls">
-            <button id="play-stop-btn" class="play-stop-btn">▶ PLAY</button>
-            <audio id="audio-player" style="display: none;"></audio>
-        </div>
-
-        <div class="list-container">
-            <ul id="station-list" class="station-list">
-                <li class="system-msg">국가와 장르를 선택하고 SEARCH 버튼을 누르세요.</li>
-            </ul>
-        </div>
+    <div class="display-panel">
+        <div id="led-status" class="led-text">SYSTEM STANDBY</div>
+        <div id="led-station" class="led-text">SELECT COUNTRY</div>
     </div>
 
-    <script>
-        const audioPlayer = document.getElementById('audio-player');
-        const playStopBtn = document.getElementById('play-stop-btn');
-        const ledStatus = document.getElementById('led-status');
-        const ledStation = document.getElementById('led-station');
-        const stationList = document.getElementById('station-list');
-        const tuneBtn = document.getElementById('tune-btn');
+    <div class="search-steps">
+        <div class="step-group">
+            <div class="step-label">STEP 1: SELECT COUNTRY</div>
+            <select id="country-select">
+                <option value="">국가를 선택하세요 (Select)</option>
+                <option value="South Korea">South Korea (대한민국)</option>
+                <option value="United States">United States (미국)</option>
+                <option value="United Kingdom">United Kingdom (영국)</option>
+                <option value="Japan">Japan (일본)</option>
+                <option value="France">France (프랑스)</option>
+                <option value="Germany">Germany (독일)</option>
+                <option value="Italy">Italy (이탈리아)</option>
+                <option value="Canada">Canada (캐나다)</option>
+            </select>
+        </div>
 
-        let isPlaying = false;
-        let currentUrl = '';
+        <div class="step-group">
+            <div class="step-label">STEP 2: SELECT GENRE</div>
+            <select id="genre-select">
+                <option value="">장르를 선택하세요 (Select)</option>
+                <option value="news">News (뉴스/시사)</option>
+                <option value="talk">Talk (교양/토크)</option>
+                <option value="classical">Classical (클래식)</option>
+                <option value="jazz">Jazz (재즈)</option>
+                <option value="pop">Pop (팝송)</option>
+                <option value="rock">Rock (락)</option>
+                <option value="kpop">K-Pop (케이팝)</option>
+            </select>
+        </div>
 
-        // 검색 함수
-        async function searchStations() {
-            const country = document.getElementById('country').value;
-            const genre = document.getElementById('genre').value;
+        <button id="search-btn" class="tune-btn">SEARCH FREQUENCY</button>
+    </div>
 
-            ledStatus.innerText = "TUNING...";
-            ledStation.innerText = "SEARCHING FREQUENCY";
-            stationList.innerHTML = '<li class="system-msg">주파수를 탐색 중입니다...</li>';
+    <div class="player-bar">
+        <button id="play-btn" class="play-btn">
+            <span id="btn-icon">▶</span>
+            <span id="btn-text">PLAY</span>
+        </button>
+        <audio id="audio-player" style="display:none"></audio>
+    </div>
 
-            // 국가와 장르를 교차로 필터링하는 API URL
-            let url = `https://de1.api.radio-browser.info/json/stations/search?limit=30&is_https=true&hidebroken=true&order=clickcount&reverse=true`;
-            if (country) url += `&countryExact=${encodeURIComponent(country)}`;
-            if (genre) url += `&tagList=${encodeURIComponent(genre)}`;
+    <div class="list-window">
+        <ul id="station-list">
+            <li class="no-data">국가와 장르를 선택한 후<br>SEARCH 버튼을 눌러주세요.</li>
+        </ul>
+    </div>
+</div>
 
-            try {
-                const response = await fetch(url);
-                const stations = await response.json();
+<script>
+    const audioPlayer = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnText = document.getElementById('btn-text');
+    const ledStatus = document.getElementById('led-status');
+    const ledStation = document.getElementById('led-station');
+    const stationList = document.getElementById('station-list');
+    const searchBtn = document.getElementById('search-btn');
 
-                // 요구사항 반영: 탐색 결과가 없을 경우 명확한 메시지 출력
-                if (stations.length === 0) {
-                    ledStatus.innerText = "NO SIGNAL";
-                    ledStation.innerText = "NO SERVICE";
-                    stationList.innerHTML = `<li class="system-msg" style="color:#ffb000;">"해당 카테고리에는 서비스가 없습니다."<br>다른 조건으로 검색해 보세요.</li>`;
-                    return;
-                }
+    let isPlaying = false;
+    let currentUrl = '';
 
-                ledStatus.innerText = "SIGNAL FOUND";
-                ledStation.innerText = `${stations.length} CHANNELS FOUND`;
-                stationList.innerHTML = '';
+    // 검색 실행
+    async function performSearch() {
+        const country = document.getElementById('country-select').value;
+        const genre = document.getElementById('genre-select').value;
 
-                stations.forEach(station => {
-                    const li = document.createElement('li');
-                    li.className = 'station-item';
-                    
-                    li.innerHTML = `
-                        <div class="station-name">${station.name}</div>
-                        <div class="station-meta">${station.codec || 'MP3'} | ${station.bitrate ? station.bitrate + 'k' : 'AUTO'}</div>
-                    `;
+        if(!country) {
+            alert("먼저 국가를 선택해 주세요.");
+            return;
+        }
 
-                    li.onclick = () => loadStation(station.url_resolved, station.name);
-                    stationList.appendChild(li);
-                });
-            } catch (error) {
-                ledStatus.innerText = "ERROR";
-                ledStation.innerText = "CONNECTION FAILED";
-                stationList.innerHTML = '<li class="system-msg" style="color:red;">네트워크 에러가 발생했습니다.</li>';
+        ledStatus.innerText = "TUNING...";
+        ledStation.innerText = "SCANNING...";
+        stationList.innerHTML = '<li class="no-data">주파수를 탐색 중입니다...</li>';
+
+        // 한국 검색 최적화 및 파라미터 구성
+        // countryExact 대신 country를 사용하여 검색 범위를 넓힘
+        let url = `https://de1.api.radio-browser.info/json/stations/search?limit=50&is_https=true&hidebroken=true&order=clickcount&reverse=true`;
+        url += `&country=${encodeURIComponent(country)}`;
+        if(genre) url += `&tag=${encodeURIComponent(genre)}`;
+
+        try {
+            const response = await fetch(url);
+            const stations = await response.json();
+
+            // 결과가 없을 경우 메시지 처리
+            if (stations.length === 0) {
+                ledStatus.innerText = "NO SIGNAL";
+                ledStation.innerText = "NOT FOUND";
+                stationList.innerHTML = `
+                    <li class="no-data">
+                        "해당 카테고리에는 서비스가 없습니다."<br>
+                        <small style="color:#666">(HTTPS를 지원하지 않는 채널은 제외되었습니다)</small>
+                    </li>`;
+                return;
             }
-        }
 
-        // 방송국 로드 함수
-        function loadStation(url, name) {
-            currentUrl = url;
-            ledStatus.innerText = "NOW TUNED";
-            ledStation.innerText = name.toUpperCase(); // 레트로 감성을 위해 대문자 변환
-            
-            audioPlayer.src = url;
-            playAudio();
-        }
+            ledStatus.innerText = "SIGNAL STRENGTH: HIGH";
+            ledStation.innerText = `${stations.length} STATIONS READY`;
+            stationList.innerHTML = '';
 
-        // 재생/정지 제어 로직
-        function playAudio() {
-            if (!currentUrl) return;
-            audioPlayer.play()
-                .then(() => {
-                    isPlaying = true;
-                    playStopBtn.innerText = "■ STOP";
-                    playStopBtn.classList.add('playing');
-                })
-                .catch(e => {
-                    ledStatus.innerText = "OFFLINE";
-                    ledStation.innerText = "CANNOT PLAY STREAM";
-                    isPlaying = false;
-                });
+            stations.forEach(station => {
+                const li = document.createElement('li');
+                li.className = 'station-item';
+                li.innerHTML = `
+                    <div class="st-name">${station.name}</div>
+                    <div class="st-tags">${station.tags ? station.tags.split(',').slice(0,3).join(', ') : 'No Tags'}</div>
+                `;
+                li.onclick = () => selectStation(station.url_resolved, station.name);
+                stationList.appendChild(li);
+            });
+        } catch (error) {
+            ledStatus.innerText = "SYSTEM ERROR";
+            stationList.innerHTML = '<li class="no-data" style="color:red">연결 실패. 네트워크를 확인하세요.</li>';
         }
+    }
 
-        function stopAudio() {
-            audioPlayer.pause();
-            audioPlayer.src = ''; // 스트리밍 데이터 소모 방지를 위해 소스 끊기
-            audioPlayer.src = currentUrl;
+    // 방송국 선택
+    function selectStation(url, name) {
+        currentUrl = url;
+        ledStatus.innerText = "TUNED IN";
+        ledStation.innerText = name.toUpperCase();
+        audioPlayer.src = url;
+        startPlayback();
+    }
+
+    function startPlayback() {
+        audioPlayer.play().then(() => {
+            isPlaying = true;
+            btnIcon.innerText = "■";
+            btnText.innerText = "STOP";
+            playBtn.classList.add('playing');
+        }).catch(e => {
+            ledStatus.innerText = "LINK BROKEN";
             isPlaying = false;
-            playStopBtn.innerText = "▶ PLAY";
-            playStopBtn.classList.remove('playing');
-            ledStatus.innerText = "STANDBY";
-        }
-
-        playStopBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                stopAudio();
-            } else {
-                if (currentUrl) playAudio();
-                else alert("먼저 리스트에서 방송국을 선택해주세요.");
-            }
         });
+    }
 
-        tuneBtn.addEventListener('click', searchStations);
-    </script>
+    function stopPlayback() {
+        audioPlayer.pause();
+        audioPlayer.src = ""; // 스트림 완전 종료
+        audioPlayer.src = currentUrl;
+        isPlaying = false;
+        btnIcon.innerText = "▶";
+        btnText.innerText = "PLAY";
+        playBtn.classList.remove('playing');
+        ledStatus.innerText = "STANDBY";
+    }
+
+    playBtn.addEventListener('click', () => {
+        if(isPlaying) stopPlayback();
+        else if(currentUrl) startPlayback();
+    });
+
+    searchBtn.addEventListener('click', performSearch);
+</script>
+
 </body>
 </html>
