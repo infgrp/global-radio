@@ -3,203 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bright Global Radio</title>
+    <title>Studio Broadcast Receiver</title>
     <style>
-        /* 🎨 전체 테마: 밝고 화사한 그라디언트 배경 */
+        /* 🎛️ 전체 테마: 스튜디오의 어둡고 차분한 조명 느낌 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* 부드러운 백색 그라디언트 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at center, #2c2f33 0%, #111214 100%); 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; color: #333; padding: 15px;
+            min-height: 100vh; color: #b9bbbe; padding: 15px;
         }
 
-        /* 📻 라디오 본체: 하얗고 깨끗한 조약돌 같은 디자인 */
+        /* 📻 랙 마운트(Rack Mount) 스타일의 메탈 본체 */
         .radio-device {
-            width: 100%; max-width: 450px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 30px; /* 아주 둥글게 */
-            /* 부드럽고 고급스러운 그림자 */
-            box-shadow: 0 20px 60px rgba(0,0,0,0.05), inset 0 0 2px rgba(255,255,255,0.5);
-            padding: 40px 25px; 
-            border: 1px solid rgba(255,255,255,0.6);
-            backdrop-filter: blur(10px); /* 유리 효과 */
+            width: 100%; max-width: 480px;
+            background: linear-gradient(to bottom, #2a2c31, #1e1f23);
+            border-radius: 6px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 
+                        inset 0 1px 1px rgba(255,255,255,0.1), 
+                        inset 0 -2px 5px rgba(0,0,0,0.4);
+            padding: 30px 20px; 
+            border: 1px solid #141518;
             position: relative;
-            overflow: hidden;
+        }
+
+        /* 스튜디오 장비 나사 구멍 디자인 (디테일) */
+        .radio-device::before, .radio-device::after {
+            content:''; position: absolute; top: 15px; width: 8px; height: 8px;
+            background: #111; border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+        }
+        .radio-device::before { left: 15px; }
+        .radio-device::after { right: 15px; }
+
+        .brand-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding: 0 10px;
+        }
+        .brand-name {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+            color: #72767d; font-weight: bold; text-shadow: 0 -1px 0 #000;
         }
         
-        /* 상단 장식 포인트 */
-        .radio-device::before {
-            content:''; position: absolute; top:0; left:0; width: 100%; height: 8px;
-            background: linear-gradient(to right, #a1887f, #fbc02d, #f06292, #4fc3f7); /* 화사한 멀티 컬러 */
+        /* ON AIR 방송국 지시등 */
+        .on-air-light {
+            font-size: 0.7rem; font-weight: bold; letter-spacing: 1px;
+            color: #4a1919; border: 1px solid #4a1919; padding: 2px 6px; border-radius: 3px;
+            transition: 0.3s;
+        }
+        .on-air-light.active {
+            color: #ff3b30; border-color: #ff3b30;
+            text-shadow: 0 0 8px rgba(255, 59, 48, 0.8);
+            box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.3), 0 0 10px rgba(255, 59, 48, 0.2);
         }
 
-        .brand {
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px;
-            color: #aaa; text-align: center; margin-bottom: 25px; font-weight: bold;
-        }
-
-        /* ☀️ 디스플레이 패널: 밝고 화사한 파스텔 톤 screen */
+        /* 📟 VFD (진공형광디스플레이) 모니터 패널 */
         .display-panel {
-            background: linear-gradient(120deg, #e0f7fa 0%, #fffde7 100%); /* 밝은 민트+옐로우 */
-            border: 2px solid #fff; border-radius: 15px;
-            padding: 20px; margin-bottom: 30px; 
-            box-shadow: inset 0 2px 10px rgba(0,188,212,0.1), 0 5px 15px rgba(0,0,0,0.02);
-            text-align: center;
+            background: #090a0c;
+            border: 2px solid #18191c; border-radius: 4px;
+            padding: 20px; margin-bottom: 25px; 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+            border-bottom: 3px solid #111;
         }
         
         .screen-text {
-            color: #00838f; /* 진한 민트색 텍스트 */
-            font-family: 'Verdana', sans-serif;
+            /* 스튜디오 장비 특유의 형광 시안(Cyan) 색상 */
+            color: #00e5ff; 
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+            text-align: center;
         }
-        #led-status { font-size: 0.75rem; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
-        #led-station { font-size: 1.15rem; font-weight: 900; min-height: 1.4em; word-break: break-all; color: #006064; }
+        #led-status { font-size: 0.8rem; margin-bottom: 8px; opacity: 0.8; }
+        #led-station { font-size: 1.2rem; font-weight: bold; min-height: 1.4em; word-break: break-all; letter-spacing: 1px;}
 
-        /* 검색 컨트롤 */
-        .search-steps { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
-        .step-group { display: flex; flex-direction: column; gap: 8px; }
-        .step-label { font-size: 0.7rem; color: #f06292; letter-spacing: 1px; font-weight: bold; text-transform: uppercase; }
+        /* 기계식 노브/스위치 느낌의 선택창 */
+        .search-steps { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .step-group { display: flex; flex-direction: column; gap: 6px; }
+        .step-label { font-size: 0.7rem; color: #8e9297; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* 하얀색 입력창 디자인 */
         select {
-            appearance: none; background: #fff; color: #555;
-            border: 1px solid #e1e1e1; padding: 14px; border-radius: 12px;
+            appearance: none; background: #202225; color: #dcddde;
+            border: 1px solid #18191c; padding: 12px; border-radius: 4px;
             font-size: 0.95rem; cursor: pointer; outline: none;
-            transition: 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
-        select:focus { border-color: #4fc3f7; box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2); }
+        select:focus { border-color: #00e5ff; box-shadow: 0 0 0 1px #00e5ff; }
 
-        /* 화사한 스카이 블루 검색 버튼 */
+        /* 장비 스캔 버튼 */
         .tune-btn {
-            background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
-            color: #fff; border: none; padding: 16px;
-            border-radius: 12px; font-size: 1rem; font-weight: bold;
-            letter-spacing: 2px; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 5px 15px rgba(41, 182, 246, 0.3);
+            background: linear-gradient(to bottom, #4f545c, #36393f);
+            color: #fff; border: 1px solid #202225; padding: 14px;
+            border-radius: 4px; font-size: 0.95rem; font-weight: bold;
+            letter-spacing: 2px; cursor: pointer; transition: 0.1s;
+            box-shadow: 0 3px 0 #18191c, 0 4px 6px rgba(0,0,0,0.3);
+            text-shadow: 0 -1px 0 #000;
         }
-        .tune-btn:hover { background: linear-gradient(135deg, #29b6f6 0%, #039be5 100%); }
-        .tune-btn:active { transform: translateY(1px); box-shadow: 0 2px 5px rgba(41, 182, 246, 0.3); }
+        .tune-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #18191c, 0 1px 2px rgba(0,0,0,0.3); }
 
-        /* 재생 영역 */
-        .player-bar {
-            margin-top: 10px; padding-top: 25px; border-top: 1px solid #eee;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        /* 하단 데크(재생/리스트) */
+        .deck-area {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 15px;
+            align-items: stretch;
+            border-top: 1px solid #3e4146;
+            padding-top: 20px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
         }
         
-        /* 💖 화사한 핑크색 재생 버튼 */
+        /* 묵직한 메인 플레이 버튼 */
         .play-btn {
-            background: #fff; color: #f06292; border: none;
-            width: 90px; height: 90px; border-radius: 50%; font-size: 0.8rem;
-            font-weight: bold; cursor: pointer; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; gap: 6px;
-            box-shadow: 0 10px 25px rgba(240, 98, 146, 0.2), inset 0 0 0 2px #f06292;
-            transition: 0.2s;
+            background: linear-gradient(to bottom, #36393f, #202225);
+            color: #72767d; border: 1px solid #18191c;
+            border-radius: 6px; cursor: pointer; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 5px;
+            box-shadow: 0 4px 0 #111, 0 5px 10px rgba(0,0,0,0.5);
+            transition: 0.1s;
         }
-        .play-btn:hover { transform: scale(1.03); box-shadow: 0 12px 30px rgba(240, 98, 146, 0.3), inset 0 0 0 2px #f06292; }
-        
-        /* 재생 중일 때: 민트색으로 변경 및 맥박 효과 */
-        .play-btn.playing { 
-            color: #fff; background: linear-gradient(135deg, #4db6ac 0%, #26a69a 100%); 
-            box-shadow: 0 10px 25px rgba(38, 166, 154, 0.3);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(38, 166, 154, 0.5); }
-            70% { box-shadow: 0 0 0 15px rgba(38, 166, 154, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(38, 166, 154, 0); }
-        }
+        .play-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #111; }
+        .play-btn.playing { color: #43b581; text-shadow: 0 0 8px rgba(67, 181, 129, 0.5); border-color: #2b4f3b; }
+        .btn-icon { font-size: 1.5rem; }
+        .btn-text { font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* 결과 리스트 창 */
+        /* 모니터링 리스트 창 */
         .list-window {
-            background: #fff; border-radius: 15px; height: 200px;
-            overflow-y: auto; margin-top: 25px; border: 1px solid #eee;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+            background: #18191c; border-radius: 4px; height: 160px;
+            overflow-y: auto; border: 1px solid #111;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
         }
         .station-item {
-            padding: 18px 15px; border-bottom: 1px solid #f5f5f5; cursor: pointer;
-            display: flex; flex-direction: column; gap: 6px; transition: 0.1s;
+            padding: 12px 15px; border-bottom: 1px solid #202225; cursor: pointer;
+            display: flex; flex-direction: column; gap: 4px; border-left: 3px solid transparent;
         }
-        .station-item:hover { background-color: #f0f9ff; }
-        .st-name { color: #1a1a1a; font-size: 0.95rem; font-weight: 600; }
-        .st-tags { color: #999; font-size: 0.75rem; background: #f5f5f5; padding: 2px 6px; border-radius: 4px; display: inline-block; align-self: flex-start;}
+        .station-item:hover { background-color: #292b2f; border-left-color: #00e5ff; }
+        .st-name { color: #dcddde; font-size: 0.9rem; font-weight: 600; }
+        .st-tags { color: #72767d; font-size: 0.75rem; text-transform: uppercase;}
 
-        /* 스크롤바 커스텀 (밝게) */
-        .list-window::-webkit-scrollbar { width: 6px; }
-        .list-window::-webkit-scrollbar-track { background: #f5f5f5; }
-        .list-window::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+        .list-window::-webkit-scrollbar { width: 8px; }
+        .list-window::-webkit-scrollbar-track { background: #18191c; }
+        .list-window::-webkit-scrollbar-thumb { background: #2f3136; border-radius: 4px; }
 
-        .no-data { padding: 50px 20px; text-align: center; color: #00838f; font-size: 0.9rem; line-height: 1.6; }
+        .no-data { padding: 30px 15px; text-align: center; color: #8e9297; font-size: 0.85rem; line-height: 1.6; }
+        
+        /* 숨겨진 오디오 소스 */
+        audio { display: none; }
     </style>
 </head>
 <body>
 
 <div class="radio-device">
-    <div class="brand">Pure Sound Wave-1</div>
+    <div class="brand-header">
+        <div class="brand-name">STUDIO TUNER MK-II</div>
+        <div id="on-air-indicator" class="on-air-light">ON AIR</div>
+    </div>
 
     <div class="display-panel">
-        <div id="led-status" class="screen-text">SYSTEM READY</div>
-        <div id="led-station" class="screen-text">HELLO WORLD</div>
+        <div id="led-status" class="screen-text">SYS.STANDBY</div>
+        <div id="led-station" class="screen-text">AWAITING INPUT</div>
     </div>
 
     <div class="search-steps">
         <div class="step-group">
-            <div class="step-label">1. Pick a Country</div>
+            <div class="step-label">FREQ. REGION (COUNTRY)</div>
             <select id="country-select">
-                <option value="">국가를 선택하세요 (Select)</option>
-                <optgroup label="Asia & Oceania">
-                    <option value="KR">Korea, South (대한민국)</option>
-                    <option value="JP">Japan (일본)</option>
-                    <option value="CN">China (중국)</option>
-                    <option value="TW">Taiwan (대만)</option>
-                    <option value="AU">Australia (호주)</option>
-                </optgroup>
-                <optgroup label="Americas">
-                    <option value="US">United States (미국)</option>
-                    <option value="CA">Canada (캐나다)</option>
-                    <option value="BR">Brazil (브라질)</option>
-                </optgroup>
-                <optgroup label="Europe">
-                    <option value="GB">United Kingdom (영국)</option>
-                    <option value="FR">France (프랑스)</option>
-                    <option value="DE">Germany (독일)</option>
-                    <option value="IT">Italy (이탈리아)</option>
-                    <option value="ES">Spain (스페인)</option>
-                    <option value="SE">Sweden (스웨덴)</option>
-                </optgroup>
+                <option value="">-- SELECT REGION --</option>
+                <option value="KR">Korea, South (대한민국)</option>
+                <option value="US">United States (미국)</option>
+                <option value="GB">United Kingdom (영국)</option>
+                <option value="JP">Japan (일본)</option>
+                <option value="CN">China (중국)</option>
+                <option value="FR">France (프랑스)</option>
+                <option value="DE">Germany (독일)</option>
+                <option value="CA">Canada (캐나다)</option>
+                <option value="AU">Australia (호주)</option>
+                <option value="RU">Russia (러시아)</option>
             </select>
         </div>
 
         <div class="step-group">
-            <div class="step-label">2. Pick a Genre (Optional)</div>
+            <div class="step-label">PROGRAM TYPE (GENRE)</div>
             <select id="genre-select">
-                <option value="">전체 장르 (All Genres)</option>
-                <option value="news">News (뉴스/시사)</option>
-                <option value="talk">Talk (교양/토크)</option>
-                <option value="classical">Classical (클래식)</option>
-                <option value="jazz">Jazz (재즈)</option>
-                <option value="pop">Pop (팝송)</option>
-                <option value="kpop">K-Pop (케이팝)</option>
-                <option value="lofi">Lofi (로파이)</option>
+                <option value="">-- ALL PROGRAMS --</option>
+                <option value="news">News & Current Affairs</option>
+                <option value="talk">Talk & Speech</option>
+                <option value="classical">Classical Music</option>
+                <option value="jazz">Jazz & Blues</option>
+                <option value="pop">Pop Music</option>
+                <option value="rock">Rock Music</option>
+                <option value="electronic">Electronic / Dance</option>
+                <option value="sports">Sports Broadcast</option>
             </select>
         </div>
 
-        <button id="search-btn" class="tune-btn">FIND STATIONS</button>
+        <button id="search-btn" class="tune-btn">SCAN FREQUENCIES</button>
     </div>
 
-    <div class="player-bar">
+    <div class="deck-area">
         <button id="play-btn" class="play-btn">
-            <span id="btn-icon" style="font-size: 1.5rem;">▶</span>
-            <span id="btn-text">PLAY</span>
+            <span id="btn-icon" class="btn-icon">▶</span>
+            <span id="btn-text" class="btn-text">PLAY</span>
         </button>
-        <audio id="audio-player" style="display:none"></audio>
+        
+        <div class="list-window">
+            <ul id="station-list">
+                <li class="no-data">Select region and program type,<br>then press SCAN to find signals.</li>
+            </ul>
+        </div>
     </div>
-
-    <div class="list-window">
-        <ul id="station-list">
-            <li class="no-data">안녕하세요! 국가를 선택하고<br>FIND 버튼을 눌러보세요. ✨</li>
-        </ul>
-    </div>
+    
+    <audio id="audio-player"></audio>
 </div>
 
 <script>
@@ -211,6 +222,7 @@
     const ledStation = document.getElementById('led-station');
     const stationList = document.getElementById('station-list');
     const searchBtn = document.getElementById('search-btn');
+    const onAirIndicator = document.getElementById('on-air-indicator');
 
     let isPlaying = false;
     let currentUrl = '';
@@ -220,13 +232,13 @@
         const genre = document.getElementById('genre-select').value;
 
         if(!countryCode) {
-            alert("먼저 국가를 선택해 주세요.");
+            alert("지역(국가)을 먼저 선택해 주십시오.");
             return;
         }
 
-        ledStatus.innerText = "TUNING...";
-        ledStation.innerText = "SCANNING WAWS";
-        stationList.innerHTML = '<li class="no-data">방송국을 찾고 있어요...</li>';
+        ledStatus.innerText = "SCANNING...";
+        ledStation.innerText = "SEARCHING BANDS";
+        stationList.innerHTML = '<li class="no-data">주파수 탐색 중...</li>';
 
         let url = `https://de1.api.radio-browser.info/json/stations/search?limit=100&is_https=true&hidebroken=true&order=clickcount&reverse=true`;
         url += `&countrycode=${countryCode}`;
@@ -238,43 +250,42 @@
 
             if (stations.length === 0) {
                 ledStatus.innerText = "NO SIGNAL";
-                ledStation.innerText = "EMPTY FREQUENCY";
+                ledStation.innerText = "FREQ EMPTY";
                 stationList.innerHTML = `
                     <li class="no-data">
-                        "조건에 맞는 라디오 채널이 없어요." 😥<br><br>
-                        <small style="color:#aaa;">* 보안(HTTPS)을 지원하지 않거나,<br>방송이 일시 중단된 채널은 제외됩니다.</small>
+                        송출 중인 신호가 없습니다.<br>
+                        <small style="color:#4f545c; margin-top:5px; display:block;">* HTTPS 보안 프로토콜을 지원하는 방송국만 스캔됩니다.</small>
                     </li>`;
                 return;
             }
 
-            ledStatus.innerText = "SIGNAL FOUND";
-            ledStation.innerText = `${stations.length} CHANNELS READY`;
+            ledStatus.innerText = `FOUND: ${stations.length} SIGS`;
+            ledStation.innerText = "SELECT STATION";
             stationList.innerHTML = '';
 
             stations.forEach(station => {
                 const li = document.createElement('li');
                 li.className = 'station-item';
-                
-                // 태그 디자인 가공
-                const topTag = station.tags ? station.tags.split(',')[0].trim() : 'Radio';
+                const topTag = station.tags ? station.tags.split(',')[0].trim() : 'BROADCAST';
                 
                 li.innerHTML = `
-                    <div class="st-name">${station.name || 'Unknown'}</div>
-                    <div class="st-tags">${topTag}</div>
+                    <div class="st-name">${station.name || 'UNKNOWN ID'}</div>
+                    <div class="st-tags">[${topTag}] ${station.codec || 'MP3'}</div>
                 `;
                 li.onclick = () => selectStation(station.url_resolved, station.name);
                 stationList.appendChild(li);
             });
         } catch (error) {
-            ledStatus.innerText = "SYSTEM ERROR";
-            stationList.innerHTML = '<li class="no-data" style="color:red">연결 실패. 네트워크를 확인하세요.</li>';
+            ledStatus.innerText = "SYS.ERROR";
+            ledStation.innerText = "OFFLINE";
+            stationList.innerHTML = '<li class="no-data" style="color:#f04747">통신 오류가 발생했습니다.</li>';
         }
     }
 
     function selectStation(url, name) {
         currentUrl = url;
-        ledStatus.innerText = "NOW TUNED";
-        ledStation.innerText = name; 
+        ledStatus.innerText = "TUNED IN";
+        ledStation.innerText = name.toUpperCase(); 
         audioPlayer.src = url;
         startPlayback();
     }
@@ -285,9 +296,10 @@
             btnIcon.innerText = "■";
             btnText.innerText = "STOP";
             playBtn.classList.add('playing');
+            onAirIndicator.classList.add('active'); // ON AIR 불 켜짐
         }).catch(e => {
-            ledStatus.innerText = "LINK BROKEN";
-            ledStation.innerText = "TRY ANOTHER CHANNEL";
+            ledStatus.innerText = "STREAM ERR";
+            ledStation.innerText = "CONNECTION FAILED";
             isPlaying = false;
         });
     }
@@ -300,7 +312,8 @@
         btnIcon.innerText = "▶";
         btnText.innerText = "PLAY";
         playBtn.classList.remove('playing');
-        ledStatus.innerText = "STANDBY";
+        onAirIndicator.classList.remove('active'); // ON AIR 불 꺼짐
+        ledStatus.innerText = "SYS.STANDBY";
     }
 
     playBtn.addEventListener('click', () => {
